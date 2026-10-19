@@ -1,0 +1,24 @@
+This is an unofficial, independent replication maintained by adrianelo0107.
+It is not the authors' official implementation and is not affiliated with or
+endorsed by Yitong Duan, Weiran Wang, Jian Li, Tsinghua University, or AAAI.
+
+Original research:
+Yitong Duan, Weiran Wang, Jian Li (2025).
+FactorGCL: A Hypergraph-Based Factor Model with Temporal Residual Contrastive
+Learning for Stock Returns Prediction.
+Proceedings of the AAAI Conference on Artificial Intelligence, 39(1), 173-181.
+DOI: 10.1609/aaai.v39i1.31993
+Official publication: https://ojs.aaai.org/index.php/AAAI/article/view/31993
+Author version: https://arxiv.org/abs/2502.05218
+
+paper.pdf is the locally retained arXiv v1 author version (5 February 2025),
+not a claim to redistribute a newly authored work. appendix.pdf is the locally
+retained supplemental material. Their existing copyright notices are preserved;
+the repository MIT license does not apply to these PDFs. Consult the original
+publication and rightsholders for their applicable terms.
+
+The replication modules were independently implemented from the paper.
+No external unofficial implementation directory is included in this repository.
+Reproduction choices and data substitutions are disclosed in both READMEs.
+Market/industry inputs and stock-level predictions containing actual labels or
+returns are intentionally excluded. Obtain data through an authorized provider.

@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "Please cite the original FactorGCL paper when using this unofficial independent replication; also credit this repository when using its code."
+title: "FactorGCL-Replication: Unofficial RQData baseline replication (seed 42)"
+type: software
+authors:
+  - name: "adrianelo0107"
+repository-code: "https://github.com/adrianelo0107/FactorGCL-Replication"
+url: "https://github.com/adrianelo0107/FactorGCL-Replication"
+license: MIT
+preferred-citation:
+  type: conference-paper
+  title: "FactorGCL: A Hypergraph-Based Factor Model with Temporal Residual Contrastive Learning for Stock Returns Prediction"
+  authors:
+    - family-names: Duan
+      given-names: Yitong
+    - family-names: Wang
+      given-names: Weiran
+    - family-names: Li
+      given-names: Jian
+  year: 2025
+  collection-title: "Proceedings of the AAAI Conference on Artificial Intelligence"
+  volume: 39
+  issue: 1
+  start: 173
+  end: 181
+  doi: "10.1609/aaai.v39i1.31993"
+  url: "https://ojs.aaai.org/index.php/AAAI/article/view/31993"

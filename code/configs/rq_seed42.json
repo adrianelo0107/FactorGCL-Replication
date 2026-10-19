@@ -1,0 +1,108 @@
+{
+  "data": {
+    "panel_path": "data/panel.csv",
+    "calendar_path": "data/trading_calendar.csv",
+    "industry_path": "data/stock_industry_sw2021.csv",
+    "industry_dictionary_path": "data/sw2021_l2_mapping.csv",
+    "cache_dir": "data/cache_rq_seed42",
+    "history_length": 60,
+    "future_length": 20,
+    "horizons": [
+      1,
+      5,
+      10,
+      20
+    ],
+    "missing_ratio_threshold": 0.2,
+    "clip_quantiles": [
+      0.001,
+      0.999
+    ],
+    "clip_reservoir_size": 200000,
+    "min_stocks": 2
+  },
+  "model": {
+    "name": "factorgcl",
+    "prior_factors": 134,
+    "input_dim": 6,
+    "embedding_dim": 32,
+    "gru_layers": 2,
+    "hidden_factors": 32,
+    "projection_hidden_dim": 32,
+    "projection_output_dim": 32,
+    "negative_slope": 0.01,
+    "batchnorm_eps": 1e-05,
+    "batchnorm_momentum": 0.1,
+    "share_future_encoder": false,
+    "use_prior": true,
+    "use_hidden": true,
+    "use_alpha": true,
+    "use_cl": true
+  },
+  "training": {
+    "seed": 42,
+    "learning_rate": 0.001,
+    "adam_betas": [
+      0.9,
+      0.999
+    ],
+    "adam_eps": 1e-08,
+    "weight_decay": 0.0,
+    "max_epochs": 100,
+    "patience": 20,
+    "min_delta": 0.0,
+    "temperature": 0.1,
+    "contrastive_weight": 0.1,
+    "shuffle_dates": true,
+    "device": "cuda",
+    "cpu_threads": 4,
+    "contrastive_anchor_chunk": 512,
+    "output_dir": "outputs/rq_seed42",
+    "monitoring_enabled": false,
+    "monitoring_dates_per_epoch": 3,
+    "scaler_reference_dir": null
+  },
+  "folds": [
+    {
+      "name": "fold_1",
+      "train_start": "2014-01-01",
+      "train_end": "2018-12-31",
+      "valid_start": "2019-01-01",
+      "valid_end": "2019-12-31",
+      "test_start": "2020-01-01",
+      "test_end": "2021-12-31"
+    },
+    {
+      "name": "fold_2",
+      "train_start": "2016-01-01",
+      "train_end": "2020-12-31",
+      "valid_start": "2021-01-01",
+      "valid_end": "2021-12-31",
+      "test_start": "2022-01-01",
+      "test_end": "2023-06-30"
+    }
+  ],
+  "notes": {
+    "paper_confirmed": "T=60; future T=20; H=M=32; GRU layers=2; tau=gamma=0.1; Adam lr=0.001; 100 epochs with early stopping set to 20 steps; paper uses seed 0. The validation criterion and epoch-based interpretation are replication choices.",
+    "industry_substitution": "User approved 134 SW2021 secondary industries. Static latest classification spans all dates and has future classification information; paper uses an unnamed 83-industry system.",
+    "encoder_assumptions": "GRU last-state BatchNorm, independent future encoder, unidirectional, bias=True, dropout=0, zero initial states.",
+    "network_assumptions": "One symmetric HG layer per factor module, identity edge weights, no HG bias/dropout, LeakyReLU slope 0.01, projection 32->32->32 with both activations.",
+    "data_assumptions": "History includes signal day; future starts next trading day and uses future-window last close; volume mean uses valid observations within each branch; missing-window threshold 20%.",
+    "clipping_assumptions": "Per-fold 0.1%/99.9% quantiles of normalized training-anchor windows. Exact when count fits reservoir; otherwise seeded uniform priority-reservoir estimate, capped at 200000 values per feature.",
+    "training_assumptions": "One full date cross-section per step, two-year rolling stride, strict 21-day train/valid target purge, early stopping on mean four-horizon validation IC with 20 epoch checks.",
+    "missing_data_assumptions": "Predictor stocks selected using current/history only; targets are masked. Future branch keeps historical graph nodes and fills unavailable inputs with zero; CL uses valid matched pairs only.",
+    "masked_mse_assumption": "Guide section 5.5: average valid target elements; with unequal missing-label counts horizon weights vary. No targets are filled as observed zero.",
+    "runtime_assumption": "Windows only: MKL_THREADING_LAYER defaults to SEQUENTIAL to avoid local Anaconda OpenMP collision; Linux is unchanged. DataLoader workers=0; float32; no AMP.",
+    "scope": "Unofficial independent RQ baseline replication, seed 42 only, two rolling folds. All numeric training/model/data settings match the archived run.",
+    "price_data": "User-supplied RQ pre-adjusted OHLC and volume. VWAP reconstructed from same-date four-OHLC common factor and old unadjusted volume; source turnover matches. Factor is estimated within rounding intervals, not supplier-provided.",
+    "scaler": "Fit new per-fold training scalers from new data; do not load old scaler/model weights.",
+    "rq_variant": {
+      "id": "seed_42",
+      "training_label_clip_quantiles": null,
+      "label_clip_scope": "training_mse_only_after_cross_sectional_standardization",
+      "validation_test_labels": "original_unclipped",
+      "one_change_only": true,
+      "change": "all root seeds 42: initialization, date shuffle, Python/NumPy/PyTorch/CUDA and scaler reservoir"
+    }
+  }
+}
