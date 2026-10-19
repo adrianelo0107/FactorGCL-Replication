@@ -4,7 +4,7 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-本仓库仅整理**使用RQ数据、seed=42的完整FactorGCL基线实验**，含两折滚动训练的代码、可移植配置、汇总结果、完整逐轮loss/验证记录、各折scaler和最佳模型权重。不宣称精确重现了论文中的数值结果。
+本仓库仅整理**使用A股日频数据（前复权）、seed=42的完整FactorGCL基线实验**，含两折滚动训练的代码、可移植配置、汇总结果、完整逐轮loss/验证记录、各折scaler和最佳模型权重。不宣称精确重现了论文中的数值结果。
 
 ## 原论文与署名
 
@@ -21,7 +21,7 @@ AAAI 2025，*Proceedings of the AAAI Conference on Artificial Intelligence*，**
 
 ## 上传范围与实际结果
 
-唯一历史运行来源为`rq_variants_20261005/seed_42`。这是原本机目录名称；**本仓库仅包含其中的基线实验**，保留当次重建VWAP、完整prior/hidden/alpha模块、时间对比学习及未裁剪收益标签。不包含seed0、ensemble、状态筛选、消融、其他VWAP实验或投资模拟。
+归档实验标识为`ashare_seed42_20261005`；**本仓库仅包含seed42基线实验**，保留当次重建VWAP、完整prior/hidden/alpha模块、时间对比学习及未裁剪收益标签。不包含seed0、ensemble、状态筛选、消融、其他VWAP实验或投资模拟。
 
 样本外区间为2020年1月至2023年6月，共**846个信号日、42个月、3,384个日期/期限键**。原两折全图预测合计14,620,736个股票/日期/期限行；因逐股票文件包含真实收益和标签，未上传这些文件。
 
@@ -41,9 +41,9 @@ AAAI 2025，*Proceedings of the AAAI Conference on Artificial Intelligence*，**
 
 总样本外指标由两折日度记录拼接后重新计算，不直接平均两折ICIR或F1。月度结果仅为同一测试区间的事后描述。
 
-![RQ seed42样本外指标](results/rq_seed42/figures/main_results.png)
+![A股日频前复权数据 seed42样本外指标](results/ashare_seed42/figures/main_results.png)
 
-[完整训练与验证曲线](results/rq_seed42/figures/training_history.png) · [42个月IC](results/rq_seed42/figures/monthly_ic.png)
+[完整训练与验证曲线](results/ashare_seed42/figures/training_history.png) · [42个月IC](results/ashare_seed42/figures/monthly_ic.png)
 
 ## 实验协议与论文差异
 
@@ -71,9 +71,9 @@ AAAI 2025，*Proceedings of the AAAI Conference on Artificial Intelligence*，**
 
 表内日期区间为边界purge前的日历范围。每折从头训练、单独拟合scaler，不复用其他实验的模型或scaler。原始收益为`VWAP[t+h+1] / VWAP[t+1] − 1`，再在当日有效股票截面上标准化（`ddof=0`）；不裁剪原始收益或标准化标签。
 
-**VWAP重建。** 调整后OHLC和volume保留RQ快照值，利用同股同日四个调整前后OHLC估计共同乘数，约束在四位小数的共同舍入区间内（半单位`0.00005`），然后计算`估计乘数 × 新成交额 / 旧未复权成交量`。要求新旧成交额匹配，新RQ成交量仍作为量特征保留。该值是估计重建值，不是供应商提供的精确复权因子；同时用于特征和收益标签，不将VWAP夹到高低价内。独立工具沿用历史`0.011`容差，对显著越界报错。
+**数据与预处理。** 使用A股日频数据（前复权）。输入覆盖2013-10-10至2023-07-31，正式信号区间2014-01-01至2023-06-30，测试区间2020-01-01至2023-06-30。保留原OHLC和成交量，利用同股同日四个调整前后OHLC估计共同乘数，约束在四位小数的共同舍入区间内（半单位`0.00005`），然后计算`估计乘数 × 新成交额 / 旧未复权成交量`。要求新旧成交额匹配，原成交量仍作为量特征保留。该值是估计重建值，不是供应商提供的精确复权因子；同时用于特征和收益标签，不将VWAP夹到高低价内。独立工具沿用历史`0.011`容差，对显著越界报错。
 
-**复现边界。** 本基线未应用后来增加的ST、停复牌或交易状态筛选；标签依据端点价格有效性，没有持有路径可交易性筛选。前复权快照基准日未知，静态行业包含较晚分类信息，因此不能视为完整时点可得或可投资回测。RQ来源、样本构造、134行业及论文未披露细节都限制了与原论文的直接数值比较。
+**复现边界。** 本基线未应用后来增加的ST、停复牌或交易状态筛选；标签依据端点价格有效性，没有持有路径可交易性筛选。前复权快照基准日未知，静态行业包含较晚分类信息，因此不能视为完整时点可得或可投资回测。样本构造、134行业及论文未披露细节都限制了与原论文的直接数值比较。
 
 ## 仓库内容
 
@@ -82,20 +82,20 @@ paper.pdf / appendix.pdf          原论文与补充材料
 README.md / README.zh-CN.md      中英说明
 CITATION.cff / NOTICE / LICENSE  引用、署名及许可范围
 requirements.txt                原运行依赖版本
-code/configs/rq_seed42.json      可移植的seed42配置
+code/configs/ashare_seed42.json      可移植的seed42配置
 code/factorgcl/                  原执行版本的核心实现
 code/train.py                   seed42训练/建缓存入口
 code/reconstruct_vwap.py         独立VWAP重建工具
 code/verify_results.py           无需行情的归档与指标核验
 code/plot_results.py             基于已归档汇总结果作图
 code/smoke_test.py               合成数据CPU训练/恢复检查
-results/rq_seed42/               实际结果与模型产物
+results/ashare_seed42/               实际结果与模型产物
 SHA256SUMS.json                  发布文件校验清单
 ```
 
 结果包括分折及总日度指标、42月指标、完整逐轮训练及验证记录、最后轮验证统计、scaler、图、精简环境记录与来源。`model_state.pt`从各折原best中提取，**仅含模型tensor**，可用`torch.load(..., weights_only=True)`加载；不含优化器、RNG或完整checkpoint配置，不能代替`last.pt`恢复历史训练。使用模型仍需对应scaler和一致的行业列顺序。
 
-核心训练、数据、评估、模型源码均对照原执行版本SHA-256核对，并逐字节保留。训练图函数从原综合reporting模块提取；配置路径及说明作可移植调整；独立入口仅保留seed42，并保留历史实验签名规则和验证记录。详见[provenance.json](results/rq_seed42/provenance.json)，其中也保存未公开输入的指纹；新克隆仅凭这些指纹不能重新验证未提供的原始行情或预测。
+核心训练、数据、评估、模型源码均对照原执行版本SHA-256核对，并逐字节保留。训练图函数从原综合reporting模块提取；配置路径及说明作可移植调整；独立入口仅保留seed42及验证记录。公开路径、协议标识和独立训练的checkpoint命名空间使用统一名称；保存的原实验签名仍用于标识历史运行。详见[provenance.json](results/ashare_seed42/provenance.json)，其中也保存未公开输入的指纹；新克隆仅凭这些指纹不能重新验证未提供的原始行情或预测。
 
 ## 安装与无数据核验
 
@@ -115,7 +115,7 @@ python -B code/plot_results.py --output-dir outputs/figures
 
 ## 自备输入并重新训练
 
-**不提供数据**，包括行情、交易日历、股票行业表/字典、缓存和含实际标签/收益的逐股票预测。不包含RQ下载凭据，也不授予任何行情许可；请通过授权渠道自行获取数据。
+**不提供数据**，包括行情、交易日历、股票行业表/字典、缓存和含实际标签/收益的逐股票预测。不附带数据文件或凭据，请自行准备下列格式的输入。
 
 私有输入放在被Git忽略的`data/`：
 
@@ -137,7 +137,7 @@ python -B code/train.py
 python -B code/train.py --fold fold_1 --resume
 ```
 
-两折串行输出到新的`outputs/rq_seed42/`；训练入口禁止覆盖发布的`results/`。CPU运行可加`--device cpu`，自动选择可加`--device auto`。恢复需使用该次新运行自己保存、含优化器/scaler/RNG的`last.pt`。缓存签名含输入文件元数据，移动或重新生成输入后可能需另建缓存；不保证复现出历史签名或跨环境逐bit相同的GPU结果。
+两折串行输出到新的`outputs/ashare_seed42/`；训练入口禁止覆盖发布的`results/`。CPU运行可加`--device cpu`，自动选择可加`--device auto`。恢复需使用该次新运行自己保存、含优化器/scaler/RNG的`last.pt`。缓存签名含输入文件元数据，移动或重新生成输入后可能需另建缓存；不保证复现出历史签名或跨环境逐bit相同的GPU结果。
 
 ## 引用与许可
 

@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "Please cite the original FactorGCL paper when using this unofficial independent replication; also credit this repository when using its code."
-title: "FactorGCL-Replication: Unofficial RQData baseline replication (seed 42)"
+title: "FactorGCL-Replication: Unofficial baseline replication on forward-adjusted A-share daily data (seed 42)"
 type: software
 authors:
   - name: "adrianelo0107"

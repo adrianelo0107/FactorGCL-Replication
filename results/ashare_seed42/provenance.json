@@ -1,5 +1,4 @@
 {
-  "run_id": "rq_variants_20261005/seed_42",
   "seed": 42,
   "model": "full FactorGCL",
   "test_days": 846,
@@ -102,5 +101,7 @@
     "original_reconstruction_code_sha256": "0e675973cda0db996b35d97a8893dcafba49e1ce6fefb8e38b7d9d0a45bead9c",
     "factor_estimator_comparison": "bitwise equal to archived estimator on synthetic same-key OHLC test; CLI and inconsistent-factor rejection also checked",
     "input_scope": "Already cleaned same-key adjusted and unadjusted files; raw-provider cleaning is not bundled."
-  }
+  },
+  "archive_id": "ashare_seed42_20261005",
+  "publication_naming": "Dataset labels, public paths and protocol identifiers use neutral A-share names. Archived source signatures identify the executed experiment; new standalone training generates its own checkpoint signatures. Numerical metrics, training records, scalers and model tensors are unchanged."
 }

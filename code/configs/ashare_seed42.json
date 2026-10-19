@@ -4,7 +4,7 @@
     "calendar_path": "data/trading_calendar.csv",
     "industry_path": "data/stock_industry_sw2021.csv",
     "industry_dictionary_path": "data/sw2021_l2_mapping.csv",
-    "cache_dir": "data/cache_rq_seed42",
+    "cache_dir": "data/cache_ashare_seed42",
     "history_length": 60,
     "future_length": 20,
     "horizons": [
@@ -57,7 +57,7 @@
     "device": "cuda",
     "cpu_threads": 4,
     "contrastive_anchor_chunk": 512,
-    "output_dir": "outputs/rq_seed42",
+    "output_dir": "outputs/ashare_seed42",
     "monitoring_enabled": false,
     "monitoring_dates_per_epoch": 3,
     "scaler_reference_dir": null
@@ -93,10 +93,10 @@
     "missing_data_assumptions": "Predictor stocks selected using current/history only; targets are masked. Future branch keeps historical graph nodes and fills unavailable inputs with zero; CL uses valid matched pairs only.",
     "masked_mse_assumption": "Guide section 5.5: average valid target elements; with unequal missing-label counts horizon weights vary. No targets are filled as observed zero.",
     "runtime_assumption": "Windows only: MKL_THREADING_LAYER defaults to SEQUENTIAL to avoid local Anaconda OpenMP collision; Linux is unchanged. DataLoader workers=0; float32; no AMP.",
-    "scope": "Unofficial independent RQ baseline replication, seed 42 only, two rolling folds. All numeric training/model/data settings match the archived run.",
-    "price_data": "User-supplied RQ pre-adjusted OHLC and volume. VWAP reconstructed from same-date four-OHLC common factor and old unadjusted volume; source turnover matches. Factor is estimated within rounding intervals, not supplier-provided.",
+    "scope": "Unofficial independent A-share baseline replication, seed 42 only, two rolling folds. All numeric training/model/data settings match the archived run.",
+    "price_data": "Forward-adjusted A-share daily OHLC and volume. VWAP reconstructed from same-date four-OHLC common factor and old unadjusted volume; source turnover matches. Factor is estimated within rounding intervals, not supplier-provided.",
     "scaler": "Fit new per-fold training scalers from new data; do not load old scaler/model weights.",
-    "rq_variant": {
+    "baseline_protocol": {
       "id": "seed_42",
       "training_label_clip_quantiles": null,
       "label_clip_scope": "training_mse_only_after_cross_sectional_standardization",

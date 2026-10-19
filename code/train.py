@@ -1,4 +1,4 @@
-"""Train only the archived full-FactorGCL RQ baseline with seed 42."""
+"""Train only the archived full-FactorGCL A-share baseline with seed 42."""
 import argparse
 import hashlib
 import json
@@ -13,8 +13,8 @@ _EVALUATE = engine.evaluate_dataset
 
 def signature(cfg, fold, cache):
     """Retain the exact historical experiment-signature namespace."""
-    spec = json.dumps(cfg.notes['rq_variant'], sort_keys=True, separators=(',', ':'))
-    return hashlib.sha256((_SIGNATURE(cfg, fold, cache) + '|rq-variants-v1|' + spec).encode()).hexdigest()
+    spec = json.dumps(cfg.notes['baseline_protocol'], sort_keys=True, separators=(',', ':'))
+    return hashlib.sha256((_SIGNATURE(cfg, fold, cache) + '|baseline-v1|' + spec).encode()).hexdigest()
 
 
 def install_validation_log(cfg, fold_name, resume):
@@ -43,7 +43,7 @@ def install_validation_log(cfg, fold_name, resume):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--config', default='code/configs/rq_seed42.json')
+    parser.add_argument('--config', default='code/configs/ashare_seed42.json')
     parser.add_argument('--fold', choices=['fold_1', 'fold_2'])
     parser.add_argument('--resume', action='store_true')
     parser.add_argument('--device', choices=['cpu', 'cuda', 'auto'])
@@ -52,7 +52,7 @@ def main():
     cfg = load_config(args.config)
     if args.device:
         cfg.training.device = args.device
-    spec = cfg.notes.get('rq_variant', {})
+    spec = cfg.notes.get('baseline_protocol', {})
     if cfg.training.seed != 42 or spec.get('id') != 'seed_42' or spec.get('training_label_clip_quantiles') is not None:
         raise ValueError('This entry point is restricted to the unclipped-label seed-42 baseline.')
     if cfg.training.scaler_reference_dir is not None or not all((cfg.model.use_prior, cfg.model.use_hidden, cfg.model.use_alpha, cfg.model.use_cl)):
